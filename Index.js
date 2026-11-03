@@ -6,7 +6,7 @@ class Student {
     this.attendance = attendance;
   }
   calculateAverage() {
-    const total = this.grades.reduce((sum, g) => sum + g, 0);
+    const total = this.grades.reduce((sum, grade) => sum + grade, 0);
     return total / this.grades.length;
   }
   getGradeLabel() {
@@ -16,24 +16,35 @@ class Student {
     if (avg >= 70) return 'C';
     if (avg >= 60) return 'D';
     if (avg >= 50) return 'E';
-    return 'F';
+    else return 'F';
   }
   getFinalStatus() {
     const avg = this.calculateAverage();
-    if (avg >= 50 && this.attendance >= 75) return 'ناجح';
-    else return 'يحتاج مراجعة';
+    if (avg >= 50 && this.attendance >= 75) {
+      return 'ناجح';
+    } else {
+      return 'يحتاج مراجعة';
+    }
   }
 }
 const studentsList = [
-  new Student(101, 'أحمد محمود', [85, 90, 88], 90),
+  new Student(101, 'أحمد محمود', [85, 90, 88], 95),
   new Student(102, 'سارة علي', [45, 42, 48], 80),
-  new Student(103, 'عمر خالد', [40, 41, 44], 70),
-  new Student(104, 'مريم يوسف', [60, 65, 70], 85)
+  new Student(103, 'محمد', [40, 44, 41], 78),
+  new Student(104, 'نورهان', [95, 92, 98], 100)
 ];
-const strugglingStudents = studentsList.filter(s => s.calculateAverage() >= 40 && s.calculateAverage() <= 49);
-const boostedAverages = strugglingStudents.map(s => s.calculateAverage() + 5);
-const totalBoostedAverages = boostedAverages.reduce((sum, avg) => sum + avg, 0);
-const averageStrugglingScore = strugglingStudents.length > 0 ? totalBoostedAverages / strugglingStudents.length : 0;
-console.log("تقرير الطلاب:");
-studentsList.forEach(s => console.log(`${s.name} | ${s.calculateAverage().toFixed(2)} | ${s.getGradeLabel()} | ${s.getFinalStatus()}`));
-console.log("المتوسط بعد الرأفة:", averageStrugglingScore.toFixed(2));
+console.log("=== تقرير الطلاب ===");
+studentsList.forEach(s => {
+  console.log(`${s.name} | متوسط: ${s.calculateAverage().toFixed(2)} | تقدير: ${s.getGradeLabel()} | نتيجة: ${s.getFinalStatus()}`);
+});
+const struggling = studentsList.filter(s => {
+  const avg = s.calculateAverage();
+  return avg >= 40 && avg <= 49;
+});
+const afterMercy = struggling.map(s => s.calculateAverage() + 5);
+const totalAfterMercy = afterMercy.reduce((acc, curr) => acc + curr, 0);
+const mercyAverage = afterMercy.length > 0 ? totalAfterMercy / afterMercy.length : 0;
+console.log("\n=== لجنة الرأفة ===");
+console.log("المتعثرون:", struggling.map(s => s.name));
+console.log("بعد اضافة 5 درجات:", afterMercy);
+console.log(`المتوسط بعد الرأفة: ${mercyAverage.toFixed(2)}`);
